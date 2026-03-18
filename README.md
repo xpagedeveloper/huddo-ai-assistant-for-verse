@@ -103,7 +103,7 @@ All keys are stored locally in Chrome and only ever sent directly to the provide
 
 ## Compatibility
 
-- Tested on HCL Verse deployed on `*.isw.net.au` — should work on any Verse deployment
+- Should work on any Verse deployment. Tested on Verse 3.2.5
 - Chrome (or any Chromium-based browser — Edge, Brave, Arc, etc.)
 - Works with HCL Verse's standard web client
 
