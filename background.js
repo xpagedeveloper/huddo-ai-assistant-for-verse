@@ -57,9 +57,9 @@ function getLanguageInstruction(langCode) {
 
 function buildSystemPrompt(langInstruction) {
   return `You are an email assistant integrated into HCL Verse.
+IMPORTANT: ${langInstruction} This applies to every response you give, regardless of the language of the email or the task description.
 You help users read, summarise, reply to, and compose emails.
-Be concise and professional. When drafting email content, output only the email body text with no preamble.
-${langInstruction}`;
+Be concise and professional. When drafting email content, output only the email body text with no preamble.`;
 }
 
 function resolveLanguage(storedOverride, browserLang) {

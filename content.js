@@ -722,6 +722,7 @@ function buildLangPicker(storedDefault) {
     langBtn.textContent = label;
     langBtn.onclick     = async () => {
       sessionLang = code;
+      history = [];  // clear stale conversation context from previous language
       const s = await getStrings();
       updatePanelStrings(s);
       toggleLangPicker(false);
@@ -737,6 +738,7 @@ function buildLangPicker(storedDefault) {
       await chrome.storage.local.set({ languageOverride: code });
       storedDefault = code;
       sessionLang   = code;
+      history = [];  // clear stale conversation context from previous language
       const s = await getStrings();
       updatePanelStrings(s);
       buildLangPicker(storedDefault);
