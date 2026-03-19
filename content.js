@@ -387,6 +387,32 @@ const UI_STRINGS = {
   },
 };
 
+// ── Language list for the in-panel switcher ───────────────────────────────────
+const LANG_LIST = [
+  { code: "en-AU", label: "English (AU)" },
+  { code: "en-GB", label: "English (UK)" },
+  { code: "en",    label: "English (US)" },
+  { code: "ca",    label: "Català" },
+  { code: "cs",    label: "Čeština" },
+  { code: "de",    label: "Deutsch" },
+  { code: "es",    label: "Español" },
+  { code: "eu",    label: "Euskara" },
+  { code: "fr",    label: "Français" },
+  { code: "hu",    label: "Magyar" },
+  { code: "it",    label: "Italiano" },
+  { code: "ja",    label: "日本語" },
+  { code: "ko",    label: "한국어" },
+  { code: "nl",    label: "Nederlands" },
+  { code: "pl",    label: "Polski" },
+  { code: "pt-BR", label: "Português" },
+  { code: "ru",    label: "Русский" },
+  { code: "zh",    label: "中文 (简)" },
+  { code: "zh-TW", label: "中文 (繁)" },
+];
+
+// Session-only language override — resets when the panel is closed
+let sessionLang = null;
+
 // Resolve active language from storage, falling back to browser lang
 function getActiveLang(storedOverride) {
   const code = (storedOverride && storedOverride !== "")
@@ -400,8 +426,9 @@ function getActiveLang(storedOverride) {
   return match || "en";
 }
 
-// Get the UI strings for the active language
+// Get the UI strings for the active language (session override takes priority)
 async function getStrings() {
+  if (sessionLang) return UI_STRINGS[sessionLang] || UI_STRINGS["en"];
   return new Promise(resolve => {
     chrome.storage.local.get("languageOverride", ({ languageOverride }) => {
       const lang = getActiveLang(languageOverride);
@@ -540,11 +567,12 @@ function setLoading(on) {
   else    { btn.disabled = false; btn.textContent = window.__cvpStrings?.send || "Send"; }
 }
 
-// Send AI request — browser lang always included for fallback
+// Send AI request — session lang takes priority over stored override and browser lang
 function aiRequest(messages) {
   return chrome.runtime.sendMessage({
     type: "CLAUDE_REQUEST",
     messages,
+    sessionLang: sessionLang || null,
     browserLang: navigator.language || "en"
   });
 }
@@ -553,7 +581,7 @@ function makeDraggable(panel) {
   const header = panel.querySelector('#cvp-header');
   let dragging = false, startX, startY, startLeft, startTop;
   header.addEventListener('mousedown', e => {
-    if (e.target.id === 'cvp-close') return;
+    if (e.target.id === 'cvp-close' || e.target.id === 'cvp-lang') return;
     dragging = true; startX = e.clientX; startY = e.clientY;
     const rect = panel.getBoundingClientRect();
     startLeft = rect.left; startTop = rect.top;
@@ -652,6 +680,74 @@ async function draftWithTone(ctx, tone, s) {
 
 let history = [];
 
+// Re-label all translatable UI elements after a language switch
+function updatePanelStrings(s) {
+  const titleEl = document.querySelector('#cvp-title span');
+  if (titleEl) titleEl.textContent = s.title;
+  const inputEl = document.getElementById('cvp-input');
+  if (inputEl) inputEl.placeholder = s.placeholder;
+  const sendEl = document.getElementById('cvp-send');
+  if (sendEl && !sendEl.disabled) sendEl.textContent = s.send;
+  document.querySelectorAll('#cvp-quick-actions [data-action]').forEach(btn => {
+    if (btn.dataset.action === 'summarise')    btn.textContent = s.summarise;
+    if (btn.dataset.action === 'reply')        btn.textContent = s.reply;
+    if (btn.dataset.action === 'tone')         btn.textContent = s.tone;
+    if (btn.dataset.action === 'action-items') btn.textContent = s.actionItems;
+  });
+  window.__cvpStrings = s;
+}
+
+function toggleLangPicker(forceOpen) {
+  const picker = document.getElementById('cvp-lang-picker');
+  if (!picker) return;
+  const open = forceOpen !== undefined ? forceOpen : !picker.classList.contains('open');
+  picker.classList.toggle('open', open);
+  const btn = document.getElementById('cvp-lang');
+  if (btn) btn.classList.toggle('active', open);
+}
+
+function buildLangPicker(storedDefault) {
+  const picker = document.getElementById('cvp-lang-picker');
+  if (!picker) return;
+  const activeLang = sessionLang || storedDefault || getActiveLang('');
+  picker.innerHTML = '';
+  LANG_LIST.forEach(({ code, label }) => {
+    const isActive   = code === activeLang;
+    const isDefault  = code === storedDefault;
+    const row        = document.createElement('div');
+    row.className    = 'cvp-lang-row';
+
+    const langBtn       = document.createElement('button');
+    langBtn.className   = 'cvp-lang-btn' + (isActive ? ' active' : '');
+    langBtn.textContent = label;
+    langBtn.onclick     = async () => {
+      sessionLang = code;
+      const s = await getStrings();
+      updatePanelStrings(s);
+      toggleLangPicker(false);
+      buildLangPicker(storedDefault);
+    };
+
+    const defBtn       = document.createElement('button');
+    defBtn.className   = 'cvp-lang-default-btn' + (isDefault ? ' is-default' : '');
+    defBtn.title       = isDefault ? 'Current default' : 'Make default';
+    defBtn.textContent = isDefault ? '★' : '☆';
+    defBtn.onclick     = async e => {
+      e.stopPropagation();
+      await chrome.storage.local.set({ languageOverride: code });
+      storedDefault = code;
+      sessionLang   = code;
+      const s = await getStrings();
+      updatePanelStrings(s);
+      buildLangPicker(storedDefault);
+    };
+
+    row.appendChild(langBtn);
+    row.appendChild(defBtn);
+    picker.appendChild(row);
+  });
+}
+
 async function createPanel() {
   if (document.getElementById("claude-verse-panel")) return;
 
@@ -664,8 +760,12 @@ async function createPanel() {
   panel.innerHTML = `
     <div id="cvp-header">
       <div id="cvp-title"><svg width="24" height="24" viewBox="0 0 128 128" style="flex-shrink:0;border-radius:6px"><rect width="128" height="128" rx="22" fill="#1a1f2e"/><polygon points="22,20 22,90 80,55" fill="#6fdd5a"/><polygon points="52,34 52,90 102,62" fill="#8a9099"/><rect x="76" y="6" width="46" height="22" rx="11" fill="white"/><text x="99" y="21.5" text-anchor="middle" font-family="Arial,sans-serif" font-weight="800" font-size="13" fill="#1a1f2e">AI</text></svg><span>${s.title}</span></div>
-      <button id="cvp-close" title="Close">✕</button>
+      <div id="cvp-header-actions">
+        <button id="cvp-lang" title="Switch language">🌐</button>
+        <button id="cvp-close" title="Close">✕</button>
+      </div>
     </div>
+    <div id="cvp-lang-picker"></div>
     <div id="cvp-messages"></div>
     <div id="cvp-quick-actions">
       <button data-action="summarise">${s.summarise}</button>
@@ -690,14 +790,21 @@ async function createPanel() {
   makeDraggable(panel);
   makeResizable(panel);
 
-  document.getElementById("cvp-close").onclick = () => panel.remove();
+  document.getElementById("cvp-close").onclick = () => { sessionLang = null; panel.remove(); };
   document.getElementById("cvp-send").onclick = sendMessage;
+
+  // Language picker — build and wire the globe toggle
+  chrome.storage.local.get("languageOverride", ({ languageOverride }) => {
+    buildLangPicker(languageOverride || "");
+  });
+  document.getElementById("cvp-lang").onclick = () => toggleLangPicker();
   document.getElementById("cvp-input").addEventListener("keydown", e => {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   });
 
   panel.querySelectorAll("[data-action]").forEach(btn => {
     btn.onclick = async () => {
+      const s   = await getStrings(); // always fetch fresh — picks up any session lang switch
       const ctx = getEmailContext();
       if (!ctx.subject && !ctx.body) {
         appendMessage("assistant", s.noEmail);

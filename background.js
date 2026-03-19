@@ -172,7 +172,10 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
         ["apiKey", "provider", "ollamaUrl", "ollamaModel", "languageOverride"]
       );
 
-      const langCode = resolveLanguage(stored.languageOverride, msg.browserLang);
+      // Priority: session switch > stored setting > browser language
+      const langCode = msg.sessionLang
+        ? resolveLanguage(msg.sessionLang, msg.sessionLang)
+        : resolveLanguage(stored.languageOverride, msg.browserLang);
       const systemPrompt = buildSystemPrompt(getLanguageInstruction(langCode));
       const prov = stored.provider || "claude";
       const { apiKey, ollamaUrl, ollamaModel } = stored;

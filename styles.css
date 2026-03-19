@@ -56,6 +56,23 @@
   gap: 8px;
   font-size: 13px;
 }
+#cvp-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+#cvp-lang {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  opacity: 0.8;
+  padding: 0;
+  border-radius: 4px;
+}
+#cvp-lang:hover, #cvp-lang.active { opacity: 1; }
 #cvp-close {
   background: none;
   border: none;
@@ -64,6 +81,50 @@
   font-size: 16px;
   line-height: 1;
 }
+
+/* ── Language picker slide-down ── */
+#cvp-lang-picker {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.22s ease;
+  background: #faf9f7;
+  border-bottom: 1px solid #e8e6e0;
+  flex-shrink: 0;
+}
+#cvp-lang-picker.open {
+  max-height: 192px;
+  overflow-y: auto;
+}
+.cvp-lang-row {
+  display: flex;
+  align-items: center;
+  padding: 1px 8px;
+}
+.cvp-lang-btn {
+  flex: 1;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 5px 6px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #444;
+}
+.cvp-lang-btn:hover  { background: #eeecfe; color: #2d2260; }
+.cvp-lang-btn.active { background: #eeecfe; color: #2d2260; font-weight: 600; }
+.cvp-lang-default-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #c0bcec;
+  padding: 4px 4px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.cvp-lang-default-btn:hover      { color: #5a4fcf; }
+.cvp-lang-default-btn.is-default { color: #5a4fcf; }
 
 #cvp-messages {
   flex: 1;
