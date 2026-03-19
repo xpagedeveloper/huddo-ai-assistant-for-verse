@@ -385,6 +385,26 @@ const UI_STRINGS = {
     insertBtn:    "Insereix a l'esborrany",
     insertFail:   "No s'ha pogut inserir automàticament — utilitza el botó de sota",
   },
+   "sv": {
+    title:        "Huddo AI Assistent för Verse",
+    summarise:    "Sammanfatta",
+    reply:        "Skapa svar",
+    tone:         "Förbättrar ton",
+    actionItems:  "Åtgärdspunkter",
+    send:         "Skicka",
+    placeholder:  "Fråga om detta e-post meddelande…",
+    chooseTone:   "Välj ton:",
+    tones:        ["Professionellt", "Vänligt", "Korrekt", "Formellt"],
+    summarising:  "Sammanfattar…",
+    drafting:     "Skapar svar…",
+    applyingTone: t => `Skapar ${t.toLowerCase()} ton…`,
+    findingActions: "Hittar åtgärdspunkter…",
+    noEmail:      "Jag vill gärna hjälpa dig men inget meddelande är valt ;)",
+    inserted:     "✓ Svar skapat och skickat till Verse",
+    toneApplied:  t => `✓ ${t} ton applicerad i Verse`,
+    insertBtn:    "Överförd till skapande",
+    insertFail:   "Kunde inte göra auto insert, använd knappen nedan.",
+  },
 };
 
 // ── Language list for the in-panel switcher ───────────────────────────────────
@@ -406,8 +426,9 @@ const LANG_LIST = [
   { code: "pl",    label: "Polski" },
   { code: "pt-BR", label: "Português" },
   { code: "ru",    label: "Русский" },
+  { code: "sv",    label: "Svenska"},
   { code: "zh",    label: "中文 (简)" },
-  { code: "zh-TW", label: "中文 (繁)" },
+  { code: "zh-TW", label: "中文 (繁)" }
 ];
 
 // Session-only language override — resets when the panel is closed
@@ -419,7 +440,7 @@ const LANG_NAMES = {
   "ca": "Catalan", "cs": "Czech", "de": "German", "es": "Spanish",
   "eu": "Basque", "fr": "French", "hu": "Hungarian", "it": "Italian",
   "ja": "Japanese", "ko": "Korean", "nl": "Dutch", "pl": "Polish",
-  "pt-BR": "Brazilian Portuguese", "ru": "Russian",
+  "pt-BR": "Brazilian Portuguese", "sv": "Svenska", "ru": "Russian",
   "zh": "Simplified Chinese", "zh-TW": "Traditional Chinese",
 };
 
