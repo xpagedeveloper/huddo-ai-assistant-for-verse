@@ -1,10 +1,10 @@
 # Huddo AI Assistant for HCL Verse
 
-A Chrome extension that brings AI-powered email assistance directly into HCL Verse. Summarise emails, draft replies, improve tone, extract action items, and chat with an AI — all without leaving your inbox.
+A Chrome and Firefox extension that brings AI-powered email assistance directly into HCL Verse. Summarise emails, draft replies, improve tone, extract action items, and chat with an AI — all without leaving your inbox.
 
 ![Version](https://img.shields.io/badge/version-1.2.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Platform](https://img.shields.io/badge/platform-Chrome-yellow)
+![Platform](https://img.shields.io/badge/platform-Chrome%20%7C%20Firefox-yellow)
 
 ---
 
@@ -52,12 +52,25 @@ Or if you use Git:
 git clone https://github.com/adambrownaus/huddo-ai-assistant-for-verse.git
 ```
 
-### 2. Load into Chrome
+### 2. Load into Chrome or Firefox
+
+#### Chrome
+
+
 
 1. Open Chrome and go to `chrome://extensions`
 2. Enable **Developer mode** (toggle in the top right)
 3. Click **Load unpacked**
 4. Select the `huddo-ai-assistant-for-verse` folder
+
+#### Firefox
+
+1. Go to `about:debugging#/runtime/this-firefox`
+2. Click **Load Temporary Add-on…**
+3. Select any file inside the `huddo-ai-assistant-for-verse` folder (e.g. `manifest.json`)
+4. The extension loads and persists until Firefox restarts
+
+> **Note:** Temporary add-ons are removed on restart. For a permanent install, the extension must be signed and published on [addons.mozilla.org](https://addons.mozilla.org). Firefox Developer Edition and Nightly can load unsigned extensions permanently via `about:config` → `xpinstall.signatures.required = false`.
 
 ### 3. Configure the extension
 
@@ -104,7 +117,7 @@ All keys are stored locally in Chrome and only ever sent directly to the provide
 ## Compatibility
 
 - Should work on any Verse deployment. Tested on Verse 3.2.5
-- Chrome (or any Chromium-based browser — Edge, Brave, Arc, etc.)
+- Chrome (or any Chromium-based browser — Edge, Brave, Arc, etc.) and Firefox 109+
 - Works with HCL Verse's standard web client
 
 > **Note:** HCL Verse's DOM structure can vary between versions and deployments. If the email body or reply injection isn't working on your instance, please [open an issue](https://github.com/adambrownaus/huddo-ai-assistant-for-verse/issues) with your Verse version and we'll add support.
