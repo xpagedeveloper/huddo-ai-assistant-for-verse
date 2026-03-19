@@ -878,8 +878,9 @@ async function createPanel() {
         history = [];
         appendMessage("user", s.findingActions, true);
         setLoading(true);
+        const langNote = sessionLang ? ` Write your response in ${LANG_NAMES[sessionLang] || sessionLang}.` : "";
         history = [{ role: "user", content:
-          `${langDirective()}List all action items or tasks mentioned in this email as a numbered list. `
+          `List all action items or tasks mentioned in this email as a numbered list.${langNote} `
           + `Output ONLY the action items — no preamble, no summary of the email.\n\n`
           + `Subject: ${ctx.subject}\n\n${ctx.body}`
         }];
