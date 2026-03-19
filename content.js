@@ -428,7 +428,7 @@ const LANG_LIST = [
   { code: "ru",    label: "Русский" },
   { code: "sv",    label: "Svenska"},
   { code: "zh",    label: "中文 (简)" },
-  { code: "zh-TW", label: "中文 (繁)" }
+  { code: "zh-TW", label: "中文 (繁)" },
 ];
 
 // Session-only language override — resets when the panel is closed
