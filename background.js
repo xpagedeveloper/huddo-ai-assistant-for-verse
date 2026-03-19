@@ -129,7 +129,15 @@ async function callOllama(messages, ollamaUrl, ollamaModel, systemPrompt) {
       messages: [{ role: "system", content: systemPrompt }, ...messages]
     })
   });
-  if (!res.ok) throw new Error(`Ollama error: ${res.status} ${res.statusText}`);
+  if (!res.ok) {
+    if (res.status === 403) throw new Error(
+      "Ollama blocked the request (403 Forbidden).\n\nOllama only allows requests from localhost by default. " +
+      "To allow this extension, set the OLLAMA_ORIGINS environment variable:\n\n" +
+      "  Mac/Linux:  OLLAMA_ORIGINS=* ollama serve\n" +
+      "  Windows:    set OLLAMA_ORIGINS=* in System Environment Variables, then restart Ollama."
+    );
+    throw new Error(`Ollama error: ${res.status} ${res.statusText}`);
+  }
   return (await res.json()).message.content;
 }
 
