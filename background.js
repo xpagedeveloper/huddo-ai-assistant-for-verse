@@ -30,6 +30,7 @@ const LANGUAGE_MAP = [
   { prefix: "it",    instruction: "Rispondi in italiano. Usa il Lei formale a meno che l'email non usi il tu." },
   { prefix: "es",    instruction: "Responde en español. Usa usted en contextos formales salvo que el correo use tú." },
   { prefix: "pt-BR", instruction: "Responda em português brasileiro. Use tratamento formal (você) salvo se o e-mail usar outro." },
+  { prefix: "sv",    instruction: "Svara på svenska. Om texten är på svenska." },
   { prefix: "pt",    instruction: "Responda em português europeu. Use tratamento formal salvo indicação em contrário." },
   { prefix: "ja",    instruction: "日本語で返信してください。ビジネスメールに適した丁寧語（です・ます調）を使用してください。" },
   { prefix: "ko",    instruction: "한국어로 답변해 주세요. 비즈니스 이메일에 적합한 공손한 표현(합쇼체)을 사용해 주세요." },
