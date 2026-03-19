@@ -19,7 +19,7 @@ A Chrome and Firefox extension that brings AI-powered email assistance directly 
 - **Action items** — Extract a numbered list of tasks from any email
 - **Free-form chat** — Ask the AI anything about the open email
 - **Multi-provider** — Works with Claude (Anthropic), ChatGPT (OpenAI), Gemini (Google), or Ollama (local/free)
-- **17 languages** — Full UI and AI response localisation including auto-detection from your browser
+- **18 languages** — Full UI and AI response localisation including auto-detection from your browser
 - **Draggable & resizable** panel — position and size it anywhere on screen
 - **No email selected?** — The assistant lets you know politely 😉
 
@@ -39,7 +39,7 @@ A Chrome and Firefox extension that brings AI-powered email assistance directly 
 
 ## Supported Languages
 
-English (Australian, British, American), German, French, Italian, Spanish, Portuguese (Brazilian), Dutch, Russian, Polish, Czech, Hungarian, Japanese, Korean, Simplified Chinese, Traditional Chinese.
+English (Australian, British, American), German, French, Italian, Spanish, Portuguese (Brazilian), Dutch, Russian, Polish, Czech, Hungarian, Japanese, Korean, Simplified Chinese, Traditional Chinese, Swedish.
 
 Language is auto-detected from your browser, or can be set manually in the extension settings.
 
