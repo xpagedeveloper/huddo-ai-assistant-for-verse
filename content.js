@@ -440,8 +440,9 @@ const LANG_NAMES = {
   "ca": "Catalan", "cs": "Czech", "de": "German", "es": "Spanish",
   "eu": "Basque", "fr": "French", "hu": "Hungarian", "it": "Italian",
   "ja": "Japanese", "ko": "Korean", "nl": "Dutch", "pl": "Polish",
-  "pt-BR": "Brazilian Portuguese", "sv": "Svenska", "ru": "Russian",
+  "pt-BR": "Brazilian Portuguese", "ru": "Russian",
   "zh": "Simplified Chinese", "zh-TW": "Traditional Chinese",
+  "sv": "Svenska",
 };
 
 // Resolve active language from storage, falling back to browser lang
